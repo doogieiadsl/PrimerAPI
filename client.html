@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cliente WeatherForecast</title>
+</head>
+<body>
+
+    <h1>Weather Forecast</h1>
+    <button onclick="cargarDatos()">Cargar datos</button>
+
+    <pre id="resultado" style="background:#f0f0f0; padding:10px;"></pre>
+
+    <script>
+        async function cargarDatos() {
+            const url = "http://localhost:5126/WeatherForecast"; 
+            // o "http://localhost:5000/WeatherForecast"
+
+            try {
+                const respuesta = await fetch(url);
+
+                if (!respuesta.ok) {
+                    throw new Error("Error al llamar a la API: " + respuesta.status);
+                }
+
+                const datos = await respuesta.json();
+                document.getElementById("resultado").textContent = JSON.stringify(datos, null, 2);
+
+            } catch (error) {
+                document.getElementById("resultado").textContent = "❌ " + error;
+            }
+        }
+    </script>
+
+</body>
+</html>
