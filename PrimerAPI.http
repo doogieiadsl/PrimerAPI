@@ -1,6 +1,36 @@
-@PrimerAPI_HostAddress = http://localhost:5126
+@PrimerAPI_HostAddress = https://localhost:7287
 
-GET {{PrimerAPI_HostAddress}}/weatherforecast/
+GET {{PrimerAPI_HostAddress}}/api/weatherforecast/
 Accept: application/json
+
+###
+
+@id=0
+GET {{PrimerAPI_HostAddress}}/api/weatherforecast/{{id}}
+
+
+###
+
+POST {{PrimerAPI_HostAddress}}/api/weatherforecast
+Content-Type: application/json
+
+{
+  //WeatherForecast
+}
+
+###
+@id=1
+PUT {{PrimerAPI_HostAddress}}/api/weatherforecast/{{id}}
+Content-Type: application/json
+
+{
+ 
+  "summary": "Granizo"
+}
+
+
+###
+@id=1
+DELETE {{PrimerAPI_HostAddress}}/api/weatherforecast/{{id}}
 
 ###

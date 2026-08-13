@@ -1,12 +1,26 @@
-var builder = WebApplication.CreateBuilder(args);
+ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+//Se agrego esta linea para agregara el servicio de dependencias Cors
+var MyAllowOrigins = "MyAllowOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name : MyAllowOrigins,
+      policy    =>
+      {
+          
+          //policy.WithOrigins(allowedOrigins);
+          policy.AllowAnyHeader();// Permitir cualquiert tipo de encabezado dentro del request
+          policy.AllowAnyOrigin();// Permitir a quien esta tratando de acceder al request (en este caso es cualquiera)
+          policy.AllowAnyMethod();
+      });
+}); 
 
-builder.Services.AddCors(); //Se agrego esta linea para agregara el servicio de dependencias Cors
 
 var app = builder.Build();
 
@@ -16,12 +30,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseCors(p =>
-{
-    // Se gregar estas lineas para permitir el acceso a cualquier origen que desee consumir nuestr api 
-    p.AllowAnyHeader(); // Permitir cualquiert tipo de encabezado dentro del request
-    p.AllowAnyOrigin(); // Permitir a quien esta tratando de acceder al request (en este caso es cualquiera)
-});
+app.UseCors(MyAllowOrigins);
 
 
 app.UseHttpsRedirection();
