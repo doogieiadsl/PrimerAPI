@@ -26,12 +26,21 @@ namespace PrimerAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Devuelve La lista completa de climas registrados
+        /// </summary>
+        /// <returns></returns>
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
             return ListaWeatherForecast;        
         }
 
+        /// <summary>
+        ///  Devuelve la liusta completa de climas por id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet()]
         [Route("{id}")]
         public ActionResult<WeatherForecast> GetByPosition(int id)
@@ -43,6 +52,11 @@ namespace PrimerAPI.Controllers
             return Ok(ListaWeatherForecast[id]);
         }
 
+        /// <summary>
+        /// Agrega un registro a la lista ingresando el nombre del clima
+        /// </summary>
+        /// <param name="nuevoClima"></param>
+        /// <returns></returns>
         [HttpPost]
         //(opcion1 - devolvemos el status)este tipo de valor devuelto es con el actionresult 
         //public ActionResult Post([FromBody] WeatherForecast nuevoClima)
@@ -56,6 +70,12 @@ namespace PrimerAPI.Controllers
             //(opcion 2 cuando se devuelve la lista)
             return ListaWeatherForecast;
         }
+        /// <summary>
+        /// Modifica el registro correspondiente al id y adjuntando el nuevo clima
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="climaActualizado"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("{id}")]
         public ActionResult Put(int id, [FromBody] WeatherForecast climaActualizado)
@@ -67,6 +87,11 @@ namespace PrimerAPI.Controllers
             ListaWeatherForecast[id] = climaActualizado;
             return Ok($"Índice {id} Actualizado con exito.");
         }
+        /// <summary>
+        /// Elimina el registro correspondiente al id indicado
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("{id}")]
         public ActionResult Delete(int id)
