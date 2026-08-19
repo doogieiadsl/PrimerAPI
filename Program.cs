@@ -1,3 +1,5 @@
+using CursoApis.Middlewares;
+using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +9,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("basic", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "basic",
+        In = ParameterLocation.Header,
+        Description = "Basic Authentication"
+    });
+
+    options.AddSecurityRequirement(document =>
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecuritySchemeReference("basic", document),
+                new List<string>() // <-- List<string>, no array
+            }
+        }
+    );
+});
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 //Se agrego esta linea para agregara el servicio de dependencias Cors
 var MyAllowOrigins = "MyAllowOrigins";
@@ -40,6 +61,7 @@ app.UseCors(MyAllowOrigins);
 
 
 app.UseHttpsRedirection();
+app.UseBasicAuth();
 
 app.UseAuthorization();
 
